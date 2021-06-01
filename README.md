@@ -1,4 +1,4 @@
-Vroomly backend challenge
+ACME backend challenge
 -------------------------
 
 ## Guidelines
