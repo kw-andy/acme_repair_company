@@ -5,18 +5,6 @@ ACME backend challenge
 
 NB: I've used the library requests. There is a file `requirements.txt` to install it with pip 
 
-Create a pull request with your solution.
-
-We are interested in code that is:
-
-- clean
-- extensible
-- robust
-
-
-The code may be written in your prefered language but it will be easier for us to evaluate you
-in Python or JavaScript.
-
 ## Statement
 
 We are building a car maintenance quotation generator.
