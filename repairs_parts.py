@@ -8,25 +8,27 @@ import os
 the URL variable must be set in your bash prompt (see next line)
 make sure that variable URL does not end with /
 (YES: vroomly.com | NO : vroomly.com/)
-export URL='https://www.vroomly.com/backend_challenge/labour_times'
-export FILENAME='data.json' #for the file input
-export FILENAME_OUTPUT='quotations.json' #for the file output
+export URL_TO_FETCH='https://www.vroomly.com/backend_challenge/labour_times'
+export JSON_INPUT='data.json' #for the file input
+export JSON_OUTPUT='quotations.json' #for the file output
 
 """
 
+def exp_variables_from_bash():
+    url_to_fetch = os.getenv("URL_TO_FETCH")
+    json_input = os.getenv("JSON_INPUT")
+    json_output = os.getenv("JSON_OUTPUT")
+    return url_to_fetch, json_input, json_output
 
-url = os.getenv("URL")
-filename = os.getenv("FILENAME")
-filename_output = os.getenv("FILENAME_OUTPUT")
+#url_to_fetch,json_input,json_output = exp_variables_from_bash()
 
-
-def retrieve_hourly_rate(url, filename):
+def retrieve_hourly_rate(url_to_fetch, json_input):
     """retrieve_hourly_rate
-    allows to retrieve the hourly rate from the API
+    allows to retrieve the hourly rate from the APIetch
     input: url of the API, the json file given.
     output: dictionnary -> car_id,intervention_id,time spent
     """
-    with open(filename, "r") as jsonfile:
+    with open(json_input, "r") as jsonfile:
         json_data = json.load(jsonfile)
     cars = [
         json_data["cars"][val]["id"]
@@ -38,7 +40,8 @@ def retrieve_hourly_rate(url, filename):
     spent_time_by_op_results = []
     for val_car in cars:
         for val_interv in interventions:
-            results = requests.get(f"{url}/{val_car}/{val_interv}")
+            results = requests.get(f"{url_to_fetch}/{val_car}/{val_interv}")
+            #the json has to be in text format, hence the "results.text" below
             time_load = json.loads(results.text)
             time_load = time_load["labourTime"]
             spent_time_by_op_results.append(
@@ -49,7 +52,7 @@ def retrieve_hourly_rate(url, filename):
     return spent_time_by_op_results
 
 
-def services_charges(retrieve_hourly_rate, filename):
+def services_charges(retrieve_hourly_rate, json_input):
     '''services_charges
     change the hourly rate to a rate per minute,
     for the workshops
@@ -59,7 +62,7 @@ def services_charges(retrieve_hourly_rate, filename):
                             price for the intervention,
                             intervention_id,
     '''
-    with open(filename, "r") as jsonfile:
+    with open(json_input, "r") as jsonfile:
         json_data = json.load(jsonfile)
 
     for val in range(len(json_data["workshops"])):
@@ -127,7 +130,7 @@ def get_part(part_type, car_id, preffered):
     output: the price part, either cheap, median or
     expensive
     """
-    with open(filename, "r") as jsonfile:
+    with open(json_input, "r") as jsonfile:
         json_data = json.load(jsonfile)
     prices = sorted(
         [
@@ -179,7 +182,7 @@ def price_calculation(service_with_pref):
     return service_with_pref
 
 
-def parts(services_charges_data, filename_output):
+def parts(services_charges_data, json_output):
     """parts
     change the intervention prices to a 2 digit, after decimal.
 
@@ -193,17 +196,18 @@ def parts(services_charges_data, filename_output):
             final_services_charges_data[val]["price_per_interv"]
         )
 
-    with open(filename_output, "w") as jsonoutput:
+    with open(json_output, "w") as jsonoutput:
         jsonoutput.write(json.dumps(services_charges_data,
                          sort_keys=True, indent=4))
 
 
 if __name__ == "__main__":
-    retrieve_hourly_rate = retrieve_hourly_rate(url, filename)
-    services_charges_data = services_charges(retrieve_hourly_rate, filename)
+    url_to_fetch, json_input, json_output = exp_variables_from_bash()
+    retrieve_hourly_rate = retrieve_hourly_rate(url_to_fetch, json_input)
+    services_charges_data = services_charges(retrieve_hourly_rate, json_input)
     service_with_preference = get_workshop_pref(services_charges_data)
     final_services_charges_data = price_calculation(service_with_preference)
-    parts(final_services_charges_data, filename_output)
+    parts(final_services_charges_data, json_output)
 
 
 """ expected output
