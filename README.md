@@ -1,7 +1,35 @@
 ACME backend challenge
 -------------------------
 
-## Guidelines
+## How to install and most of all what you will receive as outpout
+ 
+### To install 
+
+- Create a virtual environement 
+- Run the file `requirements.txt` through `pip` (`pip install -r requirements.txt`)
+
+### Needed 
+
+Make sure the file `data.json` is present 
+
+### To run
+
+- run the bash script, run_repairs_parts.sh (`./run_repairs_parts.sh 'https://www.vroomly.com/backend_challenge/labour_times' 'data.json' 'quotations.json'`). As you can seen you will need three arguments
+ - The URL to fetch
+ - The json input file (data.json, here in the folder)
+ - The json output (quotations.json in the example but can be name as you wish)
+
+### The result
+
+You will have an output json file with all the results, here `quotations.json`
+
+### What you will get 
+
+
+
+
+
+
 
 NB: I've used the library requests. There is a file `requirements.txt` to install it with pip 
 
