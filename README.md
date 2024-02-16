@@ -1,7 +1,7 @@
 ACME backend challenge
 -------------------------
 
-## How to install and most of all what you will receive as outpout
+## How to install and most of all what you will receive as output/result
  
 ### To install 
 
