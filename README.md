@@ -23,15 +23,6 @@ Make sure the file `data.json` is present
 
 You will have an output json file with all the results, here `quotations.json`
 
-### What you will get 
-
-
-
-
-
-
-
-NB: I've used the library requests. There is a file `requirements.txt` to install it with pip 
 
 ## Statement
 
